@@ -26,3 +26,16 @@ pub fn check_models(path:String)-> bool{
     }
 }
 
+pub fn check_servers(path:String)-> bool{
+    if fs::read_dir(&path).is_ok() {
+
+        println!("{}", "cartella dei servers trovata con successo!".green());
+
+        return true;
+    } else {
+        println!("{}{}{}", "cartella dei servers NON trovata [X]".red(), "\n", "creazione in corso...");
+        
+        return false;
+    }
+}
+
