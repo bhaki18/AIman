@@ -2,6 +2,7 @@
 // use std::io;
 // use std::fs;
 use crate::utils::files_manager::look_for_models;
+//use owo_colors::OwoColorize;
 
 pub fn cli() {
     // let mut input = String::new();
@@ -16,5 +17,5 @@ pub fn cli() {
 }
 
 fn start(){
-    println!("Starting CLI,wait...");
+    println!("{}","Starting CLI,wait...");
 }
