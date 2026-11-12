@@ -5,36 +5,31 @@ use std::env;
 use owo_colors::OwoColorize;
 
 
-pub fn look_for_models(){
-
-    // dichiaro la home e le path per i modelli AI
+pub fn look_for_models() -> Vec<String> {
     let home = env::var("HOME").unwrap(); 
     let models_dir = home.clone() + "/.AIman/models";
     let models_config_dir = home.clone() + "/.AIman/models_config";
-    let models;
+    let mut models = Vec::new(); // <-- Inizializzato vuoto
 
-    // controllo l'esistenza delle cartelle altrimenti le creo
-    
-    if fs::read_dir(&models_dir).is_ok()  {
-
+    if fs::read_dir(&models_dir).is_ok() {
         check_config(models_config_dir);
 
-        println!("{}","cartella dei modelli AI trovata con successo!".green());
+        println!("{}", "cartella dei modelli AI trovata con successo!".green());
         models = read_models(models_dir);
-        // stampo a schermo i modelli AI trovati
-        if models[0] != "Nessun modello AI trovato".to_string(){
+
+        if models[0] != "Nessun modello AI trovato".to_string() {
             println!("modelli AI trovati:");
         }
-        for modello in models{
-            println!("{}",modello);
+        for modello in &models { // <-- Usa &models per non consumare il vettore
+            println!("{}", modello);
         }
     } else {
-        println!("{}{}{}","cartella dei modelli AI NON trovata [X]".red(),"\n","creazione in corso...");
+        println!("{}{}{}", "cartella dei modelli AI NON trovata [X]".red(), "\n", "creazione in corso...");
         create_model_path(models_dir);
         check_config(models_config_dir);
     }
 
-    
+    return models;
 }
 
 

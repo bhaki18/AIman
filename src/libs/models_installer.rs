@@ -1,40 +1,37 @@
-use reqwest;
-use owo_colors::OwoColorize;
+use reqwest::blocking::Client;
+use std::fs::File;
+use std::env;
+use std::io::copy;
+use indicatif::{ProgressBar, ProgressStyle};
 
-pub fn check_url_model(url: &String) -> bool{
+pub fn install_model(url: String) -> Result<(), Box<dyn std::error::Error>> {
+    let client = Client::new();
+    let mut response = client.get(&url).send()?;
 
-    if url.starts_with("https://huggingface.co"){
-        let response = reqwest::blocking::get(
-            url
-        ).unwrap();
-
-        if response.status() == reqwest::StatusCode::OK{
-            return true;
-        }else{
-            return false;
-        }
-    }else{
-        println!("{}","url non riconosciuto! assicurati che l'url inizi con \"https://huggingface.co\"".red());
-        return false;
+    // Verifica che l'URL risponda con successo (200 OK) e non con 404
+    if !response.status().is_success() {
+        return Err(format!("Errore HTTP {}: {}", response.status(), url).into());
     }
 
-    
-}
+    let total_size = response.content_length().unwrap_or(0);
 
-pub fn install_model(url: String){
-    
-    if check_url_model(&url){
-        let response = reqwest::blocking::get(
-        url
-    ).unwrap();
+    // Configura la barra di avanzamento
+    let pb = ProgressBar::new(total_size);
+    pb.set_style(
+        ProgressStyle::default_bar()
+            .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {bytes}/{total_bytes} ({eta})")?
+            .progress_chars("#>-"),
+    );
 
-    let body = response.text().unwrap();
+    let home = env::var("HOME").unwrap(); 
+    let file_name = url.rsplit('/').next().unwrap_or("modello.gguf");
+    let model_path = format!("{}/.AIman/models/{}", home, file_name);
+    let mut file = File::create(model_path)?;
 
+    // wrap_read avanza la barra automaticamente durante la copia
+    let mut reader = pb.wrap_read(&mut response);
+    copy(&mut reader, &mut file)?;
 
-    }
-
-}
-
-pub fn install_server(){
-
+    pb.finish_with_message("Download completato!");
+    Ok(())
 }
