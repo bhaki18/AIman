@@ -9,7 +9,7 @@ pub fn read_models(path: String) -> Vec<String>{
 
     for file in files_or_dir{
         if file.as_ref().unwrap().file_name().display().to_string().ends_with(".gguf"){
-            models.push(file.unwrap().file_name().display().blue().to_string().split(".gguf").collect());
+            models.push(file.unwrap().file_name().display().to_string().split(".gguf").collect());
         }
     }
 
