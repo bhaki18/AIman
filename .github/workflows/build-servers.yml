@@ -1,4 +1,4 @@
-name: Build All LLM Servers
+name: Build All LLM Servers (CPU + NVIDIA CUDA + Metal)
 
 on:
   workflow_dispatch:
@@ -7,54 +7,195 @@ permissions:
   contents: write
 
 jobs:
-  build-all:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # --- LINUX AMD64 (CPU & NVIDIA CUDA) ---
+          - os: linux
+            arch: amd64
+            backend: cpu
+            runner: ubuntu-latest
+            ext: ""
+            cmake_gpu: "-DGGML_CUDA=OFF"
+            cargo_features: ""
+          - os: linux
+            arch: amd64
+            backend: cuda
+            runner: ubuntu-latest
+            ext: ""
+            cmake_gpu: "-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89"
+            cargo_features: "--features cuda"
+
+          # --- LINUX AARCH64 (CPU & NVIDIA CUDA) ---
+          - os: linux
+            arch: aarch64
+            backend: cpu
+            runner: ubuntu-24.04-arm
+            ext: ""
+            cmake_gpu: "-DGGML_CUDA=OFF"
+            cargo_features: ""
+
+          # --- WINDOWS AMD64 (CPU & NVIDIA CUDA) ---
+          - os: windows
+            arch: amd64
+            backend: cpu
+            runner: windows-latest
+            ext: ".exe"
+            cmake_gpu: "-DGGML_CUDA=OFF"
+            cargo_features: ""
+          - os: windows
+            arch: amd64
+            backend: cuda
+            runner: windows-latest
+            ext: ".exe"
+            cmake_gpu: "-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89"
+            cargo_features: "--features cuda"
+
+          # --- WINDOWS AARCH64 (CPU) ---
+          - os: windows
+            arch: aarch64
+            backend: cpu
+            runner: windows-11-arm
+            ext: ".exe"
+            cmake_gpu: "-DGGML_CUDA=OFF"
+            cargo_features: ""
+
+          # --- MACOS AMD64 & AARCH64 (CPU & APPLE GPU METAL) ---
+          - os: macos
+            arch: amd64
+            backend: cpu
+            runner: macos-15-intel
+            ext: ""
+            cmake_gpu: "-DGGML_METAL=OFF"
+            cargo_features: ""
+          - os: macos
+            arch: aarch64
+            backend: cpu
+            runner: macos-latest
+            ext: ""
+            cmake_gpu: "-DGGML_METAL=OFF"
+            cargo_features: ""
+          - os: macos
+            arch: aarch64
+            backend: metal
+            runner: macos-latest
+            ext: ""
+            cmake_gpu: "-DGGML_METAL=ON -DGGML_METAL_EMBED_LIBRARY=ON"
+            cargo_features: "--features metal"
+
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        shell: bash
 
     steps:
-      - name: Checkout del tuo repo
-        uses: actions/checkout@v4
+      - name: Crea cartelle di output
+        run: |
+          mkdir -p ./out/${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.backend }}
+          mkdir -p ./release_assets
 
-      - name: Crea cartella servers
-        run: mkdir -p ./servers
+      # --- Installa NVIDIA CUDA Toolkit solo nei job con backend: cuda ---
+      - name: Installa NVIDIA CUDA Toolkit
+        if: matrix.backend == 'cuda'
+        uses: Jimver/cuda-toolkit@v0.2.22
+        with:
+          cuda: '12.4.1'
 
-      # --- 1. llama.cpp standard ---
-      - name: Compila llama.cpp
+      # --- 1. Compila llama.cpp ---
+      - name: Compila llama.cpp (${{ matrix.backend }})
         run: |
           git clone --depth 1 https://github.com/ggml-org/llama.cpp /tmp/llama.cpp
-          cmake -B /tmp/llama.cpp/build -S /tmp/llama.cpp -DBUILD_SHARED_LIBS=OFF
-          cmake --build /tmp/llama.cpp/build --config Release --target llama-server llama-cli -j $(nproc)
-          cp /tmp/llama.cpp/build/bin/llama-server ./servers/llama-server
-          cp /tmp/llama.cpp/build/bin/llama-cli ./servers/llama-cli
-          strip ./servers/llama-server ./servers/llama-cli
+          cmake -B /tmp/llama.cpp/build -S /tmp/llama.cpp \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DGGML_NATIVE=OFF \
+            ${{ matrix.cmake_gpu }}
+          cmake --build /tmp/llama.cpp/build --config Release --target llama-server llama-cli -j 4
 
-      # --- 2. ik_llama.cpp (ultra-veloce su CPU) ---
-      - name: Compila ik_llama.cpp
+          target_dir="./out/${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.backend }}"
+          find /tmp/llama.cpp/build -name "llama-server${{ matrix.ext }}" -exec cp {} "$target_dir/llama-server${{ matrix.ext }}" \;
+          find /tmp/llama.cpp/build -name "llama-cli${{ matrix.ext }}" -exec cp {} "$target_dir/llama-cli${{ matrix.ext }}" \;
+
+      # --- 2. Compila ik_llama.cpp ---
+      - name: Compila ik_llama.cpp (${{ matrix.backend }})
         run: |
           git clone --depth 1 https://github.com/ikawrakow/ik_llama.cpp /tmp/ik_llama.cpp
-          cmake -B /tmp/ik_llama.cpp/build -S /tmp/ik_llama.cpp -DBUILD_SHARED_LIBS=OFF
-          cmake --build /tmp/ik_llama.cpp/build --config Release --target llama-server llama-cli -j $(nproc)
-          cp /tmp/ik_llama.cpp/build/bin/llama-server ./servers/ik-llama-server
-          cp /tmp/ik_llama.cpp/build/bin/llama-cli ./servers/ik-llama-cli
-          strip ./servers/ik-llama-server ./servers/ik-llama-cli
+          cmake -B /tmp/ik_llama.cpp/build -S /tmp/ik_llama.cpp \
+            -DBUILD_SHARED_LIBS=OFF \
+            -DGGML_NATIVE=OFF \
+            ${{ matrix.cmake_gpu }}
+          cmake --build /tmp/ik_llama.cpp/build --config Release --target llama-server llama-cli -j 4
 
-      # --- 3. mistral.rs ---
-      - name: Installa Rust e compila mistralrs
+          target_dir="./out/${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.backend }}"
+          find /tmp/ik_llama.cpp/build -name "llama-server${{ matrix.ext }}" -exec cp {} "$target_dir/ik-llama-server${{ matrix.ext }}" \;
+          find /tmp/ik_llama.cpp/build -name "llama-cli${{ matrix.ext }}" -exec cp {} "$target_dir/ik-llama-cli${{ matrix.ext }}" \;
+
+      # --- 3. Compila mistral.rs ---
+      - name: Installa Rust
         uses: dtolnay/rust-toolchain@stable
-      - name: Build mistralrs
+      - name: Compila mistralrs (${{ matrix.backend }})
+        env:
+          CUDA_COMPUTE_CAP: "80"
         run: |
-          cargo install mistralrs-cli
-          cp ~/.cargo/bin/mistralrs ./servers/mistralrs
-          strip ./servers/mistralrs
+          cargo install mistralrs-cli ${{ matrix.cargo_features }}
+          target_dir="./out/${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.backend }}"
+          cp ~/.cargo/bin/mistralrs${{ matrix.ext }} "$target_dir/mistralrs${{ matrix.ext }}"
 
-            # --- 4. Carica TUTTI i binari nelle GitHub Releases ---
+      # --- 4. Strip e prepara file per le Releases ---
+      - name: Prepara binari per le Releases
+        run: |
+          target_dir="./out/${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.backend }}"
+          for bin in "$target_dir"/*; do
+            strip "$bin" || true
+            chmod +x "$bin" || true
+            base=$(basename "$bin" "${{ matrix.ext }}")
+            cp "$bin" "./release_assets/${base}-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.backend }}${{ matrix.ext }}"
+          done
+
+      # --- 5. Carica tutto nelle GitHub Releases (supporta file fino a 2 GB, inclusi i binari CUDA) ---
       - name: Carica nelle Releases
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: "Prebuilt Server Binaries"
-          files: |
-            ./servers/llama-server
-            ./servers/llama-cli
-            ./servers/ik-llama-server
-            ./servers/ik-llama-cli
-            ./servers/mistralrs
+          name: "Prebuilt Server Binaries (CPU + CUDA + Metal)"
+          files: ./release_assets/*
+
+      # --- 6. Salva artifact per il commit nel repo ---
+      - name: Salva artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: servers-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.backend }}
+          path: ./out/${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.backend }}/
+
+  # 2. Commit nella cartella servers/ del repo (escludendo i file > 95MB che GitHub blocca fuori dalle Releases)
+  commit-to-repo:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del tuo repo
+        uses: actions/checkout@v4
+
+      - name: Scarica tutti i binari compilati
+        uses: actions/download-artifact@v4
+        with:
+          path: ./servers_temp
+
+      - name: Organizza in servers/<os>-<arch>-<backend>/ e fai Push
+        run: |
+          mkdir -p ./servers
+          for dir in ./servers_temp/servers-*; do
+            target_name=${dir#./servers_temp/servers-}
+            mkdir -p "./servers/$target_name"
+            cp -r "$dir"/* "./servers/$target_name/"
+            chmod +x "./servers/$target_name"/* || true
+          done
+
+          # GitHub blocca git push se un file supera i 100 MB (i binari CUDA pesano ~200 MB e sono già nelle Releases)
+          find ./servers -type f -size +95M -delete
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ./servers/
+          git commit -m "Aggiornati binari precompilati (CPU/CUDA/Metal) in servers/" || echo "Nessuna modifica"
+          git push
