@@ -4,7 +4,7 @@ use super::avvia_modello::avvia_modello;
 use owo_colors::OwoColorize;
 use crate::libs::installer::install_model::start_install;
 use super::remove_model::remove_model;
-use crate::cli::remove_server;
+use crate::cli::remove_server::remove_server;
 
 pub fn cli() {
     start();
@@ -15,7 +15,7 @@ pub fn cli() {
             1 =>start_install(), // installa un modello AI
             2 =>remove_model(), // disinstalla un modello AI
             3 =>println!("4"), // installa un server
-            4 =>println!("remove"), // disinstalla un server
+            4 =>remove_server(), // disinstalla un server
             5 =>println!("{}","exting cli...\ncya!".green()), // esci
             _ =>println!("{}","exting cli...\ncya!".green()), // esci
         }
