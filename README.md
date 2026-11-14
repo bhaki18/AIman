@@ -21,7 +21,7 @@
 
 ## struttura di un config.json
 
-    ```javascript
+```javascript
 
 {
     "nome_modello":"ai",
@@ -33,4 +33,4 @@
     "quantizzazione":"16"
 }
 
-    ```
+```
