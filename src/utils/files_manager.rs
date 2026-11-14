@@ -5,7 +5,8 @@ use super::check_paths::check_models;
 use super::check_paths::check_servers;
 use super::create_paths::create_path;
 use super::read_models::read_models;
-
+use super::check_model_conf::check_model_conf;
+use super::create_model_conf::create_model_conf;
 
 
 pub fn start_fsman() -> Vec<String> {
@@ -28,6 +29,12 @@ pub fn start_fsman() -> Vec<String> {
     }
 
     models = read_models(models_dir);
+
+    for model in &models{
+        if !check_model_conf(model.clone()){
+            create_model_conf(model.to_string());
+        }
+    }
     
     return models;
 }

@@ -3,7 +3,8 @@
     AIman is an AI manager for local models,something like ollama,but in rust!
     #ILOVERUST
 
- ## struttura del progetto:
+## struttura del progetto
+
  .AIman/
     models/
         // i vari modelli AI tipo:
@@ -20,12 +21,16 @@
 
 ## struttura di un config.json
 
-    {
-        "nome_modello":"ai",
-        "path_modello":".AIman/models/ai.gguf",
-        "famiglia_modello":"qwen",
-        "tipo_di_modello":"llm",
-        "repo_hf":"https://huggingface.co/company/ai.gguf",
-        "server_utilizzato":".AIman/server/mistralrs.bin",
-        "quantizzazione":"16bits"
-    }
+    ```javascript
+
+{
+    "nome_modello":"ai",
+    "path_modello":".AIman/models/ai.gguf",
+    "famiglia_modello":"qwen",
+    "tipo_di_modello":"llm",
+    "repo_hf":"https://huggingface.co/company/ai.gguf",
+    "server_utilizzato":".AIman/server/mistralrs.bin",
+    "quantizzazione":"16"
+}
+
+    ```
