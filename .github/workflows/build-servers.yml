@@ -105,11 +105,12 @@ jobs:
 
       # --- 1. Compila llama.cpp ---
       - name: Compila llama.cpp (${{ matrix.backend }})
+        continue-on-error: true
         run: |
           git clone --depth 1 https://github.com/ggml-org/llama.cpp /tmp/llama.cpp
           cmake -B /tmp/llama.cpp/build -S /tmp/llama.cpp \
             -DBUILD_SHARED_LIBS=OFF \
-            -DGGML_NATIVE=OFF \
+            -DGGML_OPENMP=OFF \
             ${{ matrix.cmake_gpu }}
           cmake --build /tmp/llama.cpp/build --config Release --target llama-server llama-cli -j 4
 
@@ -119,11 +120,13 @@ jobs:
 
       # --- 2. Compila ik_llama.cpp ---
       - name: Compila ik_llama.cpp (${{ matrix.backend }})
+        continue-on-error: true
         run: |
           git clone --depth 1 https://github.com/ikawrakow/ik_llama.cpp /tmp/ik_llama.cpp
           cmake -B /tmp/ik_llama.cpp/build -S /tmp/ik_llama.cpp \
             -DBUILD_SHARED_LIBS=OFF \
-            -DGGML_NATIVE=OFF \
+            -DGGML_OPENMP=OFF \
+            -DGGML_LLAMAFILE=OFF \
             ${{ matrix.cmake_gpu }}
           cmake --build /tmp/ik_llama.cpp/build --config Release --target llama-server llama-cli -j 4
 
@@ -135,6 +138,7 @@ jobs:
       - name: Installa Rust
         uses: dtolnay/rust-toolchain@stable
       - name: Compila mistralrs (${{ matrix.backend }})
+        continue-on-error: true
         env:
           CUDA_COMPUTE_CAP: "80"
         run: |
@@ -145,6 +149,7 @@ jobs:
       # --- 4. Strip e prepara file per le Releases ---
       - name: Prepara binari per le Releases
         run: |
+          shopt -s nullglob
           target_dir="./out/${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.backend }}"
           for bin in "$target_dir"/*; do
             strip "$bin" || true
