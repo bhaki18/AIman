@@ -12,14 +12,11 @@ pub fn install_from_hf(){
 
      println!("inserisci il nome del modello da installare!\nexemple: ornith-ai/Ornith-1.5-9B-GGUF");
     let _ = stdin.read_line(&mut model_from_hf);
-     println!("inserisci la quantizzazione del modello da installare!\nexemple: ornith-ai/Ornith-1.5-9B-GGUF");
+     println!("inserisci la quantizzazione del modello da installare!\nexemple: Q4_K_M");
     let _ = stdin.read_line(&mut quantizzazione);
-    let nq : u32 = quantizzazione
-        .trim()
-        .parse()
-        .expect("Wanted a number");
 
-    let quant = "*Q".to_owned()+ &nq.to_string() +"_K_M*";
+    let mut quant = "*".to_owned() +  &quantizzazione + ".gguf";
+    quant = quant.replace("\n", "");
 
 
     let destionation = env::var("HOME").unwrap() + "/.AIman/models";
@@ -38,7 +35,7 @@ pub fn install_from_hf(){
     } else {
         println!("Modello installato correttamente!");
 
-        
+
     }
     
 }

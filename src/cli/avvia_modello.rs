@@ -12,6 +12,9 @@ pub fn avvia_modello(){
 
     let models = start_fsman();
     let index = scegli_modello(&models);
+    if index == models.len(){
+        return
+    }
     let model_infos = find_model(<std::string::String as Clone>::clone(&models[index]));
     start_server(<std::string::String as Clone>::clone(&model_infos[2]),<std::string::String as Clone>::clone(&model_infos[1]));
 
@@ -26,7 +29,7 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
         if !servers.is_empty(){
 
         let selezione = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt("Seleziona il modello AI da avviare (usa le frecce ↑/↓ e Invio)")
+        .with_prompt("Seleziona il server per il modello AI da avviare (usa le frecce ↑/↓ e Invio)")
         .default(0)
         .items(&servers)
         .interact()

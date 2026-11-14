@@ -5,6 +5,7 @@ pub fn scegli_modello(modelli: &[String]) -> usize {
         .with_prompt("Seleziona il modello AI da avviare (usa le frecce ↑/↓ e Invio)")
         .default(0)
         .items(modelli)
+        .items(&["esci"])
         .interact()
         .unwrap();
 
