@@ -1,0 +1,56 @@
+name: Build All LLM Servers
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-all:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del tuo repo
+        uses: actions/checkout@v4
+
+      - name: Crea cartella servers
+        run: mkdir -p ./servers
+
+      # --- 1. llama.cpp standard ---
+      - name: Compila llama.cpp
+        run: |
+          git clone --depth 1 https://github.com/ggml-org/llama.cpp /tmp/llama.cpp
+          cmake -B /tmp/llama.cpp/build -S /tmp/llama.cpp -DBUILD_SHARED_LIBS=OFF
+          cmake --build /tmp/llama.cpp/build --config Release --target llama-server llama-cli -j $(nproc)
+          cp /tmp/llama.cpp/build/bin/llama-server ./servers/llama-server
+          cp /tmp/llama.cpp/build/bin/llama-cli ./servers/llama-cli
+          strip ./servers/llama-server ./servers/llama-cli
+
+      # --- 2. ik_llama.cpp (ultra-veloce su CPU) ---
+      - name: Compila ik_llama.cpp
+        run: |
+          git clone --depth 1 https://github.com/ikawrakow/ik_llama.cpp /tmp/ik_llama.cpp
+          cmake -B /tmp/ik_llama.cpp/build -S /tmp/ik_llama.cpp -DBUILD_SHARED_LIBS=OFF
+          cmake --build /tmp/ik_llama.cpp/build --config Release --target llama-server llama-cli -j $(nproc)
+          cp /tmp/ik_llama.cpp/build/bin/llama-server ./servers/ik-llama-server
+          cp /tmp/ik_llama.cpp/build/bin/llama-cli ./servers/ik-llama-cli
+          strip ./servers/ik-llama-server ./servers/ik-llama-cli
+
+      # --- 3. mistral.rs ---
+      - name: Installa Rust e compila mistralrs
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build mistralrs
+        run: |
+          cargo install mistralrs-cli
+          cp ~/.cargo/bin/mistralrs ./servers/mistralrs
+          strip ./servers/mistralrs
+
+      # --- 4. Commit e Push nella cartella servers/ ---
+      - name: Commit e Push dei binari
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ./servers/
+          git commit -m "Aggiornati binari precompilati in servers/" || echo "Nessuna modifica"
+          git push
