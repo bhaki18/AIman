@@ -3,6 +3,7 @@ use super::scegli_modello::scegli_modello;
 use crate::libs::find_model::find_model;
 use std::process::Command;
 use std::env;
+use std::process::Stdio;
 
 pub fn avvia_modello(){
 
@@ -17,21 +18,22 @@ pub fn avvia_modello(){
 
 pub fn start_server(mut server_path: String ,mut model_path:String){
         
-         let home = env::var("HOME").unwrap();
+    let home = env::var("HOME").unwrap();
 
-        server_path = server_path.replace("~", &home);
-        model_path = model_path.replace("~", &home);
-
-        println!("{}",server_path);
-        println!("{}",model_path);
+    server_path = server_path.replace("~", &home);
+    model_path = model_path.replace("~", &home);
 
 
+    if server_path.ends_with("mistralrs"){
 
-        let output = Command::new(server_path)
-        .arg("run")
-        .arg("-f")
-        .arg(model_path)
-        .status()
-        .expect("Errore nell'avvio di mistralrs");
-
+    let output = Command::new(server_path)
+    .env("RUST_LOG", "warn")
+    .arg("run")
+    .arg("-f")
+    .arg(model_path)
+    .status()
+    .expect("Errore nell'avvio di mistralrs");
+    
+    }
+        
 }
