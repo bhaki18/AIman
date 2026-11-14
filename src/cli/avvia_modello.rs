@@ -4,6 +4,9 @@ use crate::libs::find_model::find_model;
 use std::process::Command;
 use std::env;
 use std::process::Stdio;
+use dialoguer::{Select, theme::ColorfulTheme};
+use owo_colors::OwoColorize;
+use crate::utils::read_servers::read_servers;
 
 pub fn avvia_modello(){
 
@@ -17,6 +20,23 @@ pub fn avvia_modello(){
 }
 
 pub fn start_server(mut server_path: String ,mut model_path:String){
+    if server_path == ""{
+        let servers = read_servers();
+
+        if !servers.is_empty(){
+
+        let selezione = Select::with_theme(&ColorfulTheme::default())
+        .with_prompt("Seleziona il modello AI da avviare (usa le frecce ↑/↓ e Invio)")
+        .default(0)
+        .items(&servers)
+        .interact()
+        .unwrap();
+
+        server_path = <std::string::String as Clone>::clone(&servers[selezione]);
+        }else{
+            println!("{}","nessun server installato,installa un server per avviare un modello.".yellow());
+        }
+    }
         
     let home = env::var("HOME").unwrap();
 

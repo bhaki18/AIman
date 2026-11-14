@@ -14,7 +14,10 @@ pub fn create_model_conf(model_name:String){
         }
     }
 
-    let body = String::from("{\n\"nome_modello\":\"{}\",\n\"path_modello\":\"{}\",\n\"famiglia_modello\":\"\",\n\"tipo_di_modello\":\"\",\n\"repo_hf\":\"\",\n\"server_utilizzato\":\"\",\n\"quantizzazione\":\"\"\n}");
-    let _ = fs::write(model_config_dir,body);
+let body = format!(
+    "{{\n\"nome_modello\":\"{}\",\n\"path_modello\":\"{}\",\n\"famiglia_modello\":\"\",\n\"tipo_di_modello\":\"\",\n\"repo_hf\":\"\",\n\"server_utilizzato\":\"\",\n\"quantizzazione\":\"\"\n}}",
+    model_name,
+    model_path
+);    let _ = fs::write(model_config_dir,body);
     
 }
