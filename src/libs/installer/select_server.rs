@@ -136,7 +136,7 @@ pub fn select_server() -> String{
     let mut options = Vec::new();
 
 
-    for (key,value) in servers.entries(){
+    for (key,_value) in servers.entries(){
         options.push(key);
     }
     let scelta = Select::with_theme(&ColorfulTheme::default())

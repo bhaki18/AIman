@@ -1,4 +1,4 @@
-use std::fs;
+
 use std::env;
 use dialoguer::{Select, theme::ColorfulTheme};
 use crate::utils::read_models::read_models;

@@ -1,5 +1,4 @@
 use std::fs;
-use owo_colors::OwoColorize;
 
 // Leggo quali modelli AI (.gguf) ci sono
 pub fn read_models(path: String) -> Vec<String>{ // path si riferisce a .AIman/models

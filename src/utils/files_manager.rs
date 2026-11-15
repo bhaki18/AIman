@@ -14,7 +14,7 @@ pub fn start_fsman() -> Vec<String> {
     let models_dir = home.clone() + "/.AIman/models";
     let models_config_dir = home.clone() + "/.AIman/models_config";
     let servers_dir = home.clone() + "/.AIman/servers";
-    let mut models = Vec::new(); // vettore vuoto
+    
 
     if !check_models(models_dir.clone()){
         create_path(models_dir.clone());
@@ -28,7 +28,7 @@ pub fn start_fsman() -> Vec<String> {
         create_path(servers_dir);
     }
 
-    models = read_models(models_dir);
+    let models = read_models(models_dir);
 
     for model in &models{
         if !check_model_conf(model.clone()){

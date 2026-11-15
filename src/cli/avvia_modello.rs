@@ -3,7 +3,6 @@ use super::scegli_modello::scegli_modello;
 use crate::libs::find_model::find_model;
 use std::process::Command;
 use std::env;
-use std::process::Stdio;
 use dialoguer::{Select, theme::ColorfulTheme};
 use owo_colors::OwoColorize;
 use crate::utils::read_servers::read_servers;
@@ -49,7 +48,7 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
 
     if server_path.contains("mistralrs"){
 
-    let output = Command::new(&server_path)
+    let _output = Command::new(&server_path)
     .env("RUST_LOG", "warn")
     .arg("run")
     .arg("-f")
@@ -59,7 +58,7 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
     }
 
     if server_path.contains("ik-llama"){
-        let output = Command::new(&server_path)
+        let _output = Command::new(&server_path)
         .arg("-m")
         .arg(&model_path)
         .arg("-i")
@@ -67,19 +66,49 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
         .arg("--color")
         .arg("--log-disable")
         .status()
-        .expect("Errore nell'avvio di mistralrs");
+        .expect("Errore nell'avvio di ik-llama");
         
 
     }
     
 
     if server_path.contains("llama-cli"){
-        let output = Command::new(&server_path)
+        let _output = Command::new(&server_path)
         .arg("-m")
         .arg(&model_path)
         .arg("--log-disable")
         .status()
-        .expect("Errore nell'avvio di mistralrs");
+        .expect("Errore nell'avvio di llama-cli");
+
+    }
+
+    if server_path.contains("ik-llama-server"){
+
+        println!("{}","starting server on http://localhost:9931".green());
+
+        let _output = Command::new(&server_path)
+        .arg("-m")
+        .arg(&model_path)
+        .arg("--log-disable")
+        .status()
+        .expect("Errore nell'avvio di ik-llama-server");
+
+    
+
+    }
+
+    if server_path.contains("llama-server"){
+
+        println!("{}","starting server on http://localhost:9931".green());
+
+        let _output = Command::new(&server_path)
+        .arg("-m")
+        .arg(&model_path)
+        .arg("--log-disable")
+        .status()
+        .expect("Errore nell'avvio di llama-server");
+
+            
 
     }
         

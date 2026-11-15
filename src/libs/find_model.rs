@@ -5,7 +5,6 @@ extern crate json;
 pub fn find_model(nome: String)-> Vec<String>{
     let home = env::var("HOME").unwrap(); 
     let models_config_dir = home.clone() + "/.AIman/models_config/";
-    let servers_dir = home.clone() + "/.AIman/servers";
     let mut model_infos = Vec::new(); // [0] nome del modello.[1] path del modello in models
                                   // [2] path del server del modello.[3] famiglia del modello 
     model_infos.push(nome.clone());       // [4] tipo di modello
