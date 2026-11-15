@@ -25,7 +25,7 @@ jobs:
             backend: cuda
             runner: ubuntu-latest
             ext: ""
-            cmake_gpu: "-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89"
+            cmake_gpu: "-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=all-major"
             cargo_features: "--features cuda"
 
           # --- LINUX AARCH64 (CPU & NVIDIA CUDA) ---
@@ -50,7 +50,7 @@ jobs:
             backend: cuda
             runner: windows-latest
             ext: ".exe"
-            cmake_gpu: "-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89"
+            cmake_gpu: "-DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES=all-major"
             cargo_features: "--features cuda"
 
           # --- WINDOWS AARCH64 (CPU) ---
@@ -97,11 +97,16 @@ jobs:
           mkdir -p ./release_assets
 
       # --- Installa NVIDIA CUDA Toolkit solo nei job con backend: cuda ---
+      - name: Installa dipendenze per CUDA su Linux
+        if: matrix.backend == 'cuda' && matrix.os == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y libxml2
+
       - name: Installa NVIDIA CUDA Toolkit
         if: matrix.backend == 'cuda'
         uses: Jimver/cuda-toolkit@v0.2.22
         with:
           cuda: '12.4.1'
+          method: 'network'
 
       # --- 1. Compila llama.cpp ---
       - name: Compila llama.cpp (${{ matrix.backend }})

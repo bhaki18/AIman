@@ -5,3 +5,4 @@ pub mod scegli_modello;
 pub mod avvia_modello;
 pub mod remove_model;
 pub mod remove_server;
+pub mod start_install_server;

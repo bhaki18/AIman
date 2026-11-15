@@ -1,0 +1,126 @@
+{
+  "ik-llama-cli": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-cli",
+    "sha256": "4ac64767034f7c0b48b57a71d0624c8a2f9a6e8aba2ed3fdcfb79ffe717456b7"
+  },
+  "ik-llama-cli-linux-aarch64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-cli-linux-aarch64-cpu",
+    "sha256": "873304b6467935e80dc13c4e6d90c71d838aeaf988df59893be61e7ae246aa3c"
+  },
+  "ik-llama-cli-linux-amd64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-cli-linux-amd64-cpu",
+    "sha256": "c5f8f63f2d1178f3c1a55a0d0dfd65de3acd0d2705c1e2f38237c1901045f996"
+  },
+  "ik-llama-cli-macos-aarch64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-cli-macos-aarch64-cpu",
+    "sha256": "a3930617d68815e5d06b01374a377959a18dfe401458fac5f2017ff278bc46bb"
+  },
+  "ik-llama-cli-macos-aarch64-metal": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-cli-macos-aarch64-metal",
+    "sha256": "f5b7ddf2629efc8f86d5a00416dfbc63ddfd3d4263d9fe4847b50b0a04cb64a0"
+  },
+  "ik-llama-cli-macos-amd64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-cli-macos-amd64-cpu",
+    "sha256": "3ec1df27075ea31d7d22f6fcc85fd9391efa7a085d7c989474feaa6b85780082"
+  },
+  "ik-llama-cli-windows-amd64-cpu.exe": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-cli-windows-amd64-cpu.exe",
+    "sha256": "aeca71afe4b2b3f3ee0dd4eeefd2bf64ba95e62e1f1f95856ccb4151ffe4277b"
+  },
+  "ik-llama-server": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-server",
+    "sha256": "c4848f3e840a12358d63a8a339afeacb85dafc9bf581afeba2bf5a46a2537501"
+  },
+  "ik-llama-server-linux-aarch64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-server-linux-aarch64-cpu",
+    "sha256": "c496a6c8da38219db716f2b8699b42b1978241df42e3b28386a5310f704122af"
+  },
+  "ik-llama-server-linux-amd64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-server-linux-amd64-cpu",
+    "sha256": "a90e1cc5d66d4eadce4f6abee887d4b6b9580dca8da59921b0034b1f76676bbf"
+  },
+  "ik-llama-server-macos-aarch64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-server-macos-aarch64-cpu",
+    "sha256": "62c15fb73b5e826fcbd6ec11f0d930ecd5232399ac773540bc6d073771e1c477"
+  },
+  "ik-llama-server-macos-aarch64-metal": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-server-macos-aarch64-metal",
+    "sha256": "bbf78d10026563d654f4094779715c594243771a1426a3b4b9970bd3e8fdd1e1"
+  },
+  "ik-llama-server-macos-amd64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-server-macos-amd64-cpu",
+    "sha256": "8f50daec45f7356fb7631d954adeeaee9474e61d9e31335eed89bb6a88976b7f"
+  },
+  "ik-llama-server-windows-amd64-cpu.exe": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/ik-llama-server-windows-amd64-cpu.exe",
+    "sha256": "1abce4a1b9643d9d8b2b551923e0843f06d5dc8a713defd1684b42cb54bf8b2a"
+  },
+  "llama-cli": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-cli",
+    "sha256": "fedaa4d8dd0185e495404c1f07f93fb9bf7d21e2a0c4198476b4c396d31c0af1"
+  },
+  "llama-cli-linux-aarch64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-cli-linux-aarch64-cpu",
+    "sha256": "9c99391b05fa88d939a6c76c074b1b7d4273125896611e5c1cd79b6feb2cccb6"
+  },
+  "llama-cli-linux-amd64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-cli-linux-amd64-cpu",
+    "sha256": "3e2d0c6bbbaaf1bfac652b17ca60e01570330ce0749340cafac76125e2ad30f7"
+  },
+  "llama-cli-windows-aarch64-cpu.exe": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-cli-windows-aarch64-cpu.exe",
+    "sha256": "df57664a6102814da3df076da14a3443fb24929b4bb1cb30387d3b424183b279"
+  },
+  "llama-cli-windows-amd64-cpu.exe": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-cli-windows-amd64-cpu.exe",
+    "sha256": "fbd859f99c48d36ba5bc258d3a91416f79a156d1f9acba22899a07ba3c486928"
+  },
+  "llama-server": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-server",
+    "sha256": "e72ad56d80fd307e4582a83e651e0cf130ea7d106364d3a12ea9d4ed6083e551"
+  },
+  "llama-server-linux-aarch64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-server-linux-aarch64-cpu",
+    "sha256": "619dafa6ab664351af6c66999e7809681182d439972cd34352b360e09ab8f6dc"
+  },
+  "llama-server-linux-amd64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-server-linux-amd64-cpu",
+    "sha256": "d60aafad678d2dfe9b08be65fcff1bd3720feade469712dcf908918c577604b9"
+  },
+  "llama-server-windows-aarch64-cpu.exe": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-server-windows-aarch64-cpu.exe",
+    "sha256": "810537707fea6da8898d743b18383a04c4091fb42672752168b3630dc59c7f88"
+  },
+  "llama-server-windows-amd64-cpu.exe": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/llama-server-windows-amd64-cpu.exe",
+    "sha256": "7014e4ed6cca0c16cfd4865b23808de4f0bbd23be106d7cb2989d85ff76fd4b4"
+  },
+  "mistralrs": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/mistralrs",
+    "sha256": "1af7952be820e1ff0a79379c45855daa494896841c79be593a2d4425b32a7f80"
+  },
+  "mistralrs-linux-aarch64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/mistralrs-linux-aarch64-cpu",
+    "sha256": "f7ad2dc4ebb1b7d5f9182d15bace536d8912282a728e68a640b345d431a9bb18"
+  },
+  "mistralrs-linux-amd64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/mistralrs-linux-amd64-cpu",
+    "sha256": "a2da7678d8a12831f071dafb85ebfb4f4345239d63865d27c73ba683b4cecb0a"
+  },
+  "mistralrs-macos-aarch64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/mistralrs-macos-aarch64-cpu",
+    "sha256": "92863e1d1318cca3fe12a6cc9b315df0d6e09739ddae59eab7b66b92d819033e"
+  },
+  "mistralrs-macos-aarch64-metal": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/mistralrs-macos-aarch64-metal",
+    "sha256": "85e8977d7686bdef40337ed04774e0b7f209de011a53fafded82aac1dc800d0e"
+  },
+  "mistralrs-macos-amd64-cpu": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/mistralrs-macos-amd64-cpu",
+    "sha256": "801dbf16d7403ed6eaeb682b6e223da8d6bbb7f5f04bb79fc8b817d4e4537f91"
+  },
+  "mistralrs-windows-aarch64-cpu.exe": {
+    "url": "https://github.com/bhaki18/AIman/releases/download/latest/mistralrs-windows-aarch64-cpu.exe",
+    "sha256": "5466385874ce0e578b1fbc4575f88a4993f0ee72674dbfa50e70f2708cf695e2"
+  }
+}
