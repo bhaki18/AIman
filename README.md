@@ -19,11 +19,11 @@ Non devi ricordare comandi complicati da terminale: **AIman** funziona tramite u
 ## 🚀 Come iniziare (Guida Rapida)
 
 ### 1. Avvia AIman
-Scarica l'eseguibile di **AIman** dalla sezione [Releases](https://github.com/bhaki18/AIman/releases) e avvialo dal tuo terminale:
-
+scarica **AIman**,compilalo con 
 ```bash
-./AIman
+cargo run
 ```
+e avvialo dal tuo terminale
 
 Al primo avvio, AIman creerà automaticamente la sua cartella di lavoro nella tua Home (`~/.AIman`).
 
