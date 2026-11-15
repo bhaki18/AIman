@@ -47,16 +47,40 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
     model_path = model_path.replace("~", &home);
 
 
-    if server_path.ends_with("mistralrs"){
+    if server_path.contains("mistralrs"){
 
-    let output = Command::new(server_path)
+    let output = Command::new(&server_path)
     .env("RUST_LOG", "warn")
     .arg("run")
     .arg("-f")
-    .arg(model_path)
+    .arg(&model_path)
     .status()
     .expect("Errore nell'avvio di mistralrs");
+    }
+
+    if server_path.contains("ik-llama"){
+        let output = Command::new(&server_path)
+        .arg("-m")
+        .arg(&model_path)
+        .arg("-i")
+        .arg("-cnv")
+        .arg("--color")
+        .arg("--log-disable")
+        .status()
+        .expect("Errore nell'avvio di mistralrs");
+        
+
+    }
     
+
+    if server_path.contains("llama-cli"){
+        let output = Command::new(&server_path)
+        .arg("-m")
+        .arg(&model_path)
+        .arg("--log-disable")
+        .status()
+        .expect("Errore nell'avvio di mistralrs");
+
     }
         
 }

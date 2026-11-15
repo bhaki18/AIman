@@ -5,3 +5,4 @@ pub mod read_models;
 pub mod check_model_conf;
 pub mod create_model_conf;
 pub mod read_servers;
+pub mod makeit_executable;

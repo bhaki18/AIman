@@ -1,6 +1,7 @@
 use std::process::Command;
 use std::env;
 use url::Url;
+use crate::utils::makeit_executable::makeit_executable;
 
 // #[cfg(target_os = "linux")]
 
@@ -21,9 +22,13 @@ pub fn install_server(server_url:String){
     .arg("-L")
     .arg(&server_url)
     .arg("-o")
-    .arg(servers_dir + filename)
+    .arg(servers_dir.clone() + filename)
     .status()
     .expect("qualcosa è andato storto durante il curl!");
+
+    if output.success() {
+        makeit_executable(servers_dir + filename);
+    }
 }
 
 
