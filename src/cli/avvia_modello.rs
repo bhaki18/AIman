@@ -6,6 +6,10 @@ use std::env;
 use dialoguer::{Select, theme::ColorfulTheme};
 use owo_colors::OwoColorize;
 use crate::utils::read_servers::read_servers;
+use std::sync::Arc;
+use std::process::Stdio;
+use std::sync::Mutex;
+
 
 pub fn avvia_modello(){
 
@@ -58,15 +62,31 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
     }
 
     if server_path.contains("ik-llama"){
-        let _output = Command::new(&server_path)
-        .arg("-m")
-        .arg(&model_path)
-        .arg("-i")
-        .arg("-cnv")
-        .arg("--color")
-        .arg("--log-disable")
-        .status()
-        .expect("Errore nell'avvio di ik-llama");
+        let child = Command::new(&server_path)
+            .arg("-m")
+            .arg(&model_path)
+            .arg("-i")
+            .arg("-cnv")
+            .arg("--color")
+            .arg("--log-disable")
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Errore nell'avvio di ik-llama");
+
+        let child = Arc::new(Mutex::new(child));
+        let child_clone = Arc::clone(&child);
+
+        ctrlc::set_handler(move || {
+            eprintln!("\nInterruzione richiesta!");
+
+            if let Ok(mut process) = child_clone.lock() {
+                let _ = process.kill();
+            }
+        })
+        .expect("Errore handler CTRL+C");
+
+        // Attendi la terminazione
+        let _ = child.lock().unwrap().wait();
         
 
     }
