@@ -140,9 +140,9 @@ pub fn select_server() -> String{
         options.push(key);
     }
     let scelta = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt("seleziona un server")
+        .with_prompt("Select a server")
         .items(&options)
-        .items(&["esci"])
+        .items(&["Exit"])
         .default(0)
         .interact()
         .unwrap();

@@ -1,65 +1,65 @@
 # 🤖 AIman
 
-**AIman** è un gestore semplice, veloce e leggero (scritto in Rust 🦀) che ti permette di scaricare, organizzare e usare modelli di Intelligenza Artificiale (`.gguf`) direttamente sul tuo computer, in totale privacy e senza abbonamenti.
+**AIman** is a simple, fast, and lightweight manager (written in Rust 🦀) that lets you download, organize, and run Artificial Intelligence models (`.gguf`) directly on your computer — with complete privacy and no subscriptions.
 
-Non devi ricordare comandi complicati da terminale: **AIman** funziona tramite un **menu interattivo guidato** navigabile con le frecce della tastiera (`↑` / `↓` e `Invio`).
-
----
-
-## ✨ Cosa puoi fare con AIman
-
-* **💬 Avvia e chatta con i tuoi modelli AI:** scegli un modello installato e inizia subito a conversare direttamente dal terminale.
-* **📥 Scarica modelli da Hugging Face:** incolla il link di qualsiasi modello `.gguf` da Hugging Face o usa l'integrazione dedicata con barra di avanzamento in tempo reale.
-* **⚙️ Scegli il tuo motore (Server):** installa e passa facilmente tra diversi motori di esecuzione (come `mistralrs`, `llama.cpp`, `ik_llama.cpp`) in base al tuo hardware (CPU o scheda video).
-* **🗑️ Gestisci lo spazio su disco:** disinstalla con un click i modelli o i server che non usi più.
-* **🔒 100% Locale e Privato:** tutti i modelli e le conversazioni girano sul tuo PC; nessun dato viene inviato a server esterni.
+You don't need to memorize complex terminal commands: **AIman** works through an **interactive guided menu** that you navigate using your keyboard arrow keys (`↑` / `↓` and `Enter`).
 
 ---
 
-## 🚀 Come iniziare (Guida Rapida)
+## ✨ What you can do with AIman
 
-### 1. Avvia AIman
-scarica **AIman**,compilalo con 
+* **💬 Run and chat with your AI models:** pick an installed model and start chatting right from your terminal.
+* **📥 Download models from Hugging Face:** paste the link to any `.gguf` model from Hugging Face or use the built-in integration with a real-time progress bar.
+* **⚙️ Choose your engine (Server):** easily install and switch between different inference engines (such as `mistralrs`, `llama.cpp`, `ik_llama.cpp`) depending on your hardware (CPU or GPU).
+* **🗑️ Manage disk space:** uninstall models or servers you no longer use in just one step.
+* **🔒 100% Local & Private:** all models and conversations run on your PC; no data is ever sent to external servers.
+
+---
+
+## 🚀 Getting Started (Quick Guide)
+
+### 1. Launch AIman
+Download **AIman**, build and run it from your terminal with:
+
 ```bash
 cargo run
 ```
-e avvialo dal tuo terminale
 
-Al primo avvio, AIman creerà automaticamente la sua cartella di lavoro nella tua Home (`~/.AIman`).
-
----
-
-### 2. Usa il Menu Interattivo
-Muoviti con le **frecce `↑` e `↓`** e premi **`Invio`** per scegliere cosa fare:
-
-1. **Avvia un modello Ai** — Scegli uno dei modelli che hai scaricato e inizia subito a usarlo.
-2. **Installa un modello Ai** — Scarica un nuovo modello `.gguf` da Hugging Face.
-3. **Disinstalla un modello Ai** — Elimina un modello per liberare spazio sul computer.
-4. **Installa un server** — Scarica il motore necessario per far girare i modelli AI (es. `mistralrs` o `llama.cpp`).
-5. **Disinstalla un server** — Rimuovi un server installato.
-6. **Esci** — Chiude il programma.
+On first launch, AIman will automatically create its working directory in your Home folder (`~/.AIman`).
 
 ---
 
-### 3. Il tuo primo avvio in 3 passi
-Se è la prima volta che usi AIman:
-1. Vai su **`Installa un server`** per scaricare un motore di avvio (ti basta farlo solo la prima volta).
-2. Vai su **`Installa un modello Ai`** e scarica il modello `.gguf` che preferisci da Hugging Face.
-3. Vai su **`Avvia un modello Ai`**, seleziona il modello appena scaricato e inizia a chattare!
+### 2. Use the Interactive Menu
+Navigate with the **`↑` and `↓` arrow keys** and press **`Enter`** to choose an action:
+
+1. **Start an AI model** — Pick one of your downloaded models and start using it right away.
+2. **Install an AI model** — Download a new `.gguf` model from Hugging Face.
+3. **Uninstall an AI model** — Delete a model to free up disk space.
+4. **Install a server** — Download the engine required to run AI models (e.g., `mistralrs` or `llama.cpp`).
+5. **Uninstall a server** — Remove an installed server.
+6. **Exit** — Close the program.
 
 ---
 
-## 📂 Dove vengono salvati i file?
-
-AIman tiene tutto ordinato in un'unica cartella nascosta nella tua Home (`~/.AIman`), senza sporcare il sistema:
-
-* **`~/.AIman/models/`** — Contiene i file `.gguf` dei modelli AI scaricati.
-* **`~/.AIman/servers/`** — Contiene i motori installati per avviare i modelli.
-* **`~/.AIman/models_config/`** — Contiene le preferenze salvate per ciascun modello (così AIman ricorda quale server usare).
+### 3. Your First Run in 3 Steps
+If this is your first time using AIman:
+1. Select **`Install a server`** to download a runtime engine (you only need to do this once).
+2. Select **`Install an AI model`** and download your preferred `.gguf` model from Hugging Face.
+3. Select **`Start an AI model`**, pick the model you just downloaded, and start chatting!
 
 ---
 
-## 📜 Licenza e Autore
+## 📂 Where are files stored?
 
-Creato da **Angelo Del Piano** ([@bhaki18](https://github.com/bhaki18)).  
-Distribuito sotto licenza libera **GNU General Public License v3.0 (GPL-3.0)** — consulta il file [LICENSE](./LICENSE) per maggiori dettagli.
+AIman keeps everything neatly organized inside a single hidden folder in your Home directory (`~/.AIman`), without cluttering your system:
+
+* **`~/.AIman/models/`** — Stores the downloaded `.gguf` AI model files.
+* **`~/.AIman/servers/`** — Stores the installed engines used to run the models.
+* **`~/.AIman/models_config/`** — Stores saved preferences for each model (so AIman remembers which server to use).
+
+---
+
+## 📜 License & Author
+
+Created by **Angelo Del Piano** ([@bhaki18](https://github.com/bhaki18)).  
+Distributed under the free **GNU General Public License v3.0 (GPL-3.0)** — see the [LICENSE](./LICENSE) file for more details.

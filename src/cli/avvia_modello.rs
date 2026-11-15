@@ -32,15 +32,20 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
         if !servers.is_empty(){
 
         let selezione = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt("Seleziona il server per il modello AI da avviare (usa le frecce ↑/↓ e Invio)")
+        .with_prompt("Select the server to run the AI model (use ↑/↓ arrows and Enter)")
         .default(0)
         .items(&servers)
+        .items(&["Exit"])
         .interact()
         .unwrap();
 
+        if selezione == servers.len(){
+            return;
+        }
+
         server_path = <std::string::String as Clone>::clone(&servers[selezione]);
         }else{
-            println!("{}","nessun server installato,installa un server per avviare un modello.".yellow());
+            println!("{}","No server installed, please install a server to start a model.".yellow());
         }
     }
         
@@ -58,7 +63,7 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
     .arg("-f")
     .arg(&model_path)
     .status()
-    .expect("Errore nell'avvio di mistralrs");
+    .expect("Error starting mistralrs");
     }
 
     if server_path.contains("ik-llama"){
@@ -71,19 +76,19 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
             .arg("--log-disable")
             .stdout(Stdio::piped())
             .spawn()
-            .expect("Errore nell'avvio di ik-llama");
+            .expect("Error starting ik-llama");
 
         let child = Arc::new(Mutex::new(child));
         let child_clone = Arc::clone(&child);
 
         ctrlc::set_handler(move || {
-            eprintln!("\nInterruzione richiesta!");
+            eprintln!("\nInterruption requested!");
 
             if let Ok(mut process) = child_clone.lock() {
                 let _ = process.kill();
             }
         })
-        .expect("Errore handler CTRL+C");
+        .expect("Error setting CTRL+C handler");
 
         // Attendi la terminazione
         let _ = child.lock().unwrap().wait();
@@ -98,7 +103,7 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
         .arg(&model_path)
         .arg("--log-disable")
         .status()
-        .expect("Errore nell'avvio di llama-cli");
+        .expect("Error starting llama-cli");
 
     }
 
@@ -111,7 +116,7 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
         .arg(&model_path)
         .arg("--log-disable")
         .status()
-        .expect("Errore nell'avvio di ik-llama-server");
+        .expect("Error starting ik-llama-server");
 
     
 
@@ -126,7 +131,7 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
         .arg(&model_path)
         .arg("--log-disable")
         .status()
-        .expect("Errore nell'avvio di llama-server");
+        .expect("Error starting llama-server");
 
             
 

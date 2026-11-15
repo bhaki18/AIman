@@ -6,10 +6,10 @@ pub fn remove_server(){
     let servers = read_servers();
 
     let selezione = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt("Seleziona il modello AI da rimuovere (usa le frecce ↑/↓ e Invio)")
+        .with_prompt("Select the server to remove (use ↑/↓ arrows and Enter)")
         .default(0)
         .items(&servers)
-        .items(&["esci"])
+        .items(&["Exit"])
         .interact()
         .unwrap();
 

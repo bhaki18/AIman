@@ -10,9 +10,9 @@ pub fn install_from_hf(){
 
     let stdin = io::stdin();
 
-     println!("inserisci il nome del modello da installare!\nexemple: ornith-ai/Ornith-1.5-9B-GGUF");
+     println!("Enter the name of the model to install!\nExample: ornith-ai/Ornith-1.5-9B-GGUF");
     let _ = stdin.read_line(&mut model_from_hf);
-     println!("inserisci la quantizzazione del modello da installare!\nexemple: Q4_K_M");
+     println!("Enter the quantization of the model to install!\nExample: Q4_K_M");
     let _ = stdin.read_line(&mut quantizzazione);
 
     let mut quant = "*".to_owned() +  &quantizzazione + ".gguf";
@@ -28,12 +28,12 @@ pub fn install_from_hf(){
     .arg("--include")
     .arg(&quant)
     .status()
-    .expect("qualcosa è andato storto con il download!\nverifica il nome del modello e verifica di avere hf installato");
+    .expect("Something went wrong with the download!\nPlease check the model name and make sure hf is installed");
 
     if !output.success() {
-        eprintln!("Download fallito!");
+        eprintln!("Download failed!");
     } else {
-        println!("Modello installato correttamente!");
+        println!("Model installed successfully!");
 
 
     }

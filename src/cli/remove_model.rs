@@ -13,10 +13,10 @@ pub fn remove_model(){
     let modelli = read_models(models_dir);
 
     let selezione = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt("Seleziona il modello AI da rimuovere (usa le frecce ↑/↓ e Invio)")
+        .with_prompt("Select the AI model to remove (use ↑/↓ arrows and Enter)")
         .default(0)
         .items(&modelli)
-        .items(&["esci"])
+        .items(&["Exit"])
         .interact()
         .unwrap();
 

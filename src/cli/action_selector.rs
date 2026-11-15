@@ -2,16 +2,16 @@ use dialoguer::{Select, theme::ColorfulTheme};
 
 pub fn select_action() -> u32{
     let options = &[
-        "Avvia un modello Ai",
-        "Installa un modello Ai",
-        "Disinstalla un modello Ai",
-        "Installa un server",
-        "disinstalla un server",
-        "esci"
+        "Start an AI model",
+        "Install an AI model",
+        "Uninstall an AI model",
+        "Install a server",
+        "Uninstall a server",
+        "Exit"
     ];
 
     let scelta = Select::with_theme(&ColorfulTheme::default())
-        .with_prompt("seleziona una scelta")
+        .with_prompt("Select an option")
         .items(options)
         .default(0)
         .interact()

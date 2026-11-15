@@ -24,7 +24,7 @@ pub fn install_server(server_url:String){
     .arg("-o")
     .arg(servers_dir.clone() + filename)
     .status()
-    .expect("qualcosa è andato storto durante il curl!");
+    .expect("Something went wrong during curl download!");
 
     if output.success() {
         makeit_executable(servers_dir + filename);
