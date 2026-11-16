@@ -6,9 +6,12 @@ use crate::libs::installer::install_model::start_install;
 use super::remove_model::remove_model;
 use crate::cli::remove_server::remove_server;
 use super::start_install_server::start_install_server;
+use crate::utils::files_manager::start_fsman;
+use crate::agentic::start_agent::start_agent;
 
 pub fn cli() {
     start();
+    let _ = start_fsman();
     loop{
         let scelta = select_action();
         match scelta{
@@ -17,7 +20,8 @@ pub fn cli() {
             2 =>remove_model(), // disinstalla un modello AI
             3 =>start_install_server(), // installa un server
             4 =>remove_server(), // disinstalla un server
-            5 =>println!("{}","exting cli...\ncya!".green()), // esci
+            5 =>start_agent(), // avvia un agente AI
+            6 =>println!("{}","exting cli...\ncya!".green()), // esci
             _ =>println!("{}","exting cli...\ncya!".green()), // esci
         }
 

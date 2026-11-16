@@ -7,6 +7,7 @@ pub fn select_action() -> u32{
         "Uninstall an AI model",
         "Install a server",
         "Uninstall a server",
+        "Start an Angent AI",
         "Exit"
     ];
 
