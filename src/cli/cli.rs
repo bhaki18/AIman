@@ -25,7 +25,7 @@ pub fn cli() {
             _ =>println!("{}","exting cli...\ncya!".green()), // esci
         }
 
-        if scelta == 5{
+        if scelta == 6{
             break;
         }
     }
