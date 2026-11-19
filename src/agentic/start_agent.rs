@@ -9,6 +9,7 @@ use crate::utils::read_servers::read_servers;
 use std::sync::Arc;
 use std::process::Stdio;
 use std::sync::Mutex;
+use super::runtime_output_reader::read_output;
 
 pub fn start_agent(){
 
@@ -33,13 +34,24 @@ Your objective is to COMPLETE user requests through direct execution, not explai
 
 ## SHELL TOOL
 
-Execute commands using this exact syntax:
+To execute a shell command, output exactly:
 
-USE_TOOL_SHELL>command
+USE_TOOL_SHELL<`command`>
 
-The host executes the command and returns stdout, stderr and exit status.
+Replace <command> with the actual shell command.
 
-You MUST use the shell whenever filesystem or system interaction is required.
+Example:
+USE_TOOL_SHELL<`ls -la`>
+USE_TOOL_SHELL<`cat file.txt`>
+USE_TOOL_SHELL<`du folder/`>
+USE_TOOL_SHELL<`echo Hello world!`>
+
+IMPORTANT:
+- Do not insert spaces between USE_TOOL_SHELL and <.
+- Do not use Markdown code blocks.
+- Do not add explanations before or after the invocation.
+- Never pretend a command was executed.
+- Wait for the execution result before continuing.
 
 ## EXECUTION RULES
 
@@ -184,14 +196,22 @@ Your priority is EXECUTION, ACCURACY and MINIMAL OUTPUT.";
     
 
     if server_path.contains("llama-cli"){
-        let _output = Command::new(&server_path)
+        let mut output = Command::new(&server_path)
         .arg("-m")
         .arg(&model_path)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
         .arg("--log-disable")
         .arg("-sys")
         .arg(sys_prompt)
-        .status()
+        .arg("--simple-io")
+        .spawn()
         .expect("Error starting llama-cli");
+
+        read_output(&mut output);
+
+        output.wait().expect("Unknow error from the server.");
 
     }
 
