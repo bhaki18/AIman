@@ -7,7 +7,6 @@ use dialoguer::{Select, theme::ColorfulTheme};
 use owo_colors::OwoColorize;
 use crate::utils::read_servers::read_servers;
 use std::sync::Arc;
-use std::process::Stdio;
 use std::sync::Mutex;
 
 
@@ -66,7 +65,7 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
     .expect("Error starting mistralrs");
     }
 
-    if server_path.contains("ik-llama"){
+    if server_path.contains("ik-llama-cli"){
         let child = Command::new(&server_path)
             .arg("-m")
             .arg(&model_path)
@@ -74,9 +73,8 @@ pub fn start_server(mut server_path: String ,mut model_path:String){
             .arg("-cnv")
             .arg("--color")
             .arg("--log-disable")
-            .stdout(Stdio::piped())
             .spawn()
-            .expect("Error starting ik-llama");
+            .expect("Error starting ik-llama-cli");
 
         let child = Arc::new(Mutex::new(child));
         let child_clone = Arc::clone(&child);

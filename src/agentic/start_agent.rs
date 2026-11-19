@@ -6,9 +6,8 @@ use std::env;
 use dialoguer::{Select, theme::ColorfulTheme};
 use owo_colors::OwoColorize;
 use crate::utils::read_servers::read_servers;
-use std::sync::Arc;
+use std::fs;
 use std::process::Stdio;
-use std::sync::Mutex;
 use super::runtime_output_reader::read_output;
 
 pub fn start_agent(){
@@ -162,36 +161,28 @@ Your priority is EXECUTION, ACCURACY and MINIMAL OUTPUT.";
     return;
      }
 
-    if server_path.contains("ik-llama"){
-        let child = Command::new(&server_path)
+    if server_path.contains("ik-llama-cli") {
+        let sys_prompt_file = format!("{}/.AIman/system_prompt.txt", home);
+        fs::write(&sys_prompt_file, sys_prompt).expect("Error writing system_prompt.txt");
+
+        let mut output = Command::new(&server_path)
             .arg("-m")
             .arg(&model_path)
-            .arg("-i")
-            .arg("-cnv")
-            .arg("--color")
-            .arg("--log-disable")
-            .arg("-p")
-            .arg(sys_prompt)
+            .stdin(Stdio::piped())
             .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .arg("-cnv")
+            .arg("--no-display-prompt")
+            .arg("--log-disable")
+            .arg("--simple-io")
+            .arg("-spf")
+            .arg(&sys_prompt_file)
             .spawn()
-            .expect("Error starting ik-llama");
+            .expect("Error starting ik-llama-cli");
 
-        let child = Arc::new(Mutex::new(child));
-        let child_clone = Arc::clone(&child);
+        read_output(&mut output);
 
-        ctrlc::set_handler(move || {
-            eprintln!("\nInterruption requested!");
-
-            if let Ok(mut process) = child_clone.lock() {
-                let _ = process.kill();
-            }
-        })
-        .expect("Error setting CTRL+C handler");
-
-        // Attendi la terminazione
-        let _ = child.lock().unwrap().wait();
-        
-
+        output.wait().expect("Unknown error from the server.");
     }
     
 

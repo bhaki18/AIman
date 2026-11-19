@@ -6,9 +6,10 @@ pub fn read_output(process: &mut Child) {
     let mut stdout = process.stdout.take().expect("Cannot access stdout");
     let mut child_stdin = process.stdin.take().expect("Cannot access stdin");
 
-    let mut pending_tool_output: Option<String> = None;
     let mut pending_bytes: Vec<u8> = Vec::new();
     let mut current_line = String::new();
+    let mut turn_buffer = String::new();
+    let mut has_sent_first_input = false;
     let mut chunk = [0u8; 128];
 
     loop {
@@ -24,6 +25,7 @@ pub fn read_output(process: &mut Child) {
                                 print!("{}", valid_str);
                                 let _ = io::stdout().flush();
                                 current_line.push_str(valid_str);
+                                turn_buffer.push_str(valid_str);
                             }
                             pending_bytes.clear();
                             break;
@@ -37,41 +39,47 @@ pub fn read_output(process: &mut Child) {
                                 print!("{}", valid_str);
                                 let _ = io::stdout().flush();
                                 current_line.push_str(valid_str);
+                                turn_buffer.push_str(valid_str);
                                 pending_bytes.drain(..valid_up_to);
                             }
                             if let Some(err_len) = e.error_len() {
                                 pending_bytes.drain(..err_len);
                             } else {
-                                // Incomplete multi-byte UTF-8 sequence at end of chunk; wait for next read
                                 break;
                             }
                         }
                     }
                 }
 
-                // Process all completed lines in current_line
+                // Drain completed lines
                 while let Some(newline_pos) = current_line.find('\n') {
-                    let line: String = current_line.drain(..=newline_pos).collect();
-                    let line_trimmed = line.trim_end_matches(&['\r', '\n'][..]);
+                    current_line.drain(..=newline_pos);
+                }
 
-                    if line_trimmed.contains("USE_TOOL_SHELL<`") && line_trimmed.contains("`>") {
-                        let tool_res = shell_tool(line_trimmed.to_string());
+                // Both llama-cli and ik-llama-cli emit "\n> " and wait for stdin when a turn ends
+                if current_line == "> " {
+                    current_line.clear();
+
+                    if has_sent_first_input
+                        && turn_buffer.contains("USE_TOOL_SHELL<`")
+                        && turn_buffer.contains("`>")
+                    {
+                        println!();
+                        let tool_res = shell_tool(turn_buffer.clone());
                         println!("Command output:\n{}", tool_res);
-                        pending_tool_output = Some(tool_res);
-                    } else if line_trimmed.contains("/glob <pattern>") || line_trimmed.starts_with("[ Prompt:") {
-                        if let Some(tool_res) = pending_tool_output.take() {
-                            let single_line = tool_res.trim().replace('\n', " \\n ");
-                            writeln!(child_stdin, "Command output: {}", single_line).unwrap();
-                            child_stdin.flush().unwrap();
-                        } else {
-                            print!("\nYou > ");
-                            io::stdout().flush().unwrap();
+                        turn_buffer.clear();
 
-                            let mut user_input = String::new();
-                            if io::stdin().read_line(&mut user_input).is_ok() {
-                                writeln!(child_stdin, "{}", user_input.trim()).unwrap();
-                                child_stdin.flush().unwrap();
-                            }
+                        let single_line = tool_res.trim().replace('\n', " \\n ");
+                        writeln!(child_stdin, "Command output: {}", single_line).unwrap();
+                        child_stdin.flush().unwrap();
+                    } else {
+                        turn_buffer.clear();
+
+                        let mut user_input = String::new();
+                        if io::stdin().read_line(&mut user_input).is_ok() {
+                            has_sent_first_input = true;
+                            writeln!(child_stdin, "{}", user_input.trim()).unwrap();
+                            child_stdin.flush().unwrap();
                         }
                     }
                 }
